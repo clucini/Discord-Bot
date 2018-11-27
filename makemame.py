@@ -14,3 +14,13 @@ def make(im):
     template.paste(im1, region1)
     template.paste(im2, region2)
     template.save("badmeme.png")
+
+def makereddit(im1, im2):
+    template = Image.open("template.jpg")
+    im1 = Image.open(im1).resize((350,350))
+    im2 = Image.open(im2).resize((350,350))
+    region1 = (50,100)
+    region2 = (450, 100)
+    template.paste(im1, region1)
+    template.paste(im2, region2)
+    template.save("badmeme.png")

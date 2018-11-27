@@ -11,7 +11,7 @@ import reddit
 
 client = discord.Client()
 
-names = ['Sarah', 'Connor', 'Claudio', 'Liam']
+names = ['Sarah', 'Connor', 'Claudio', 'Liam', 'Ben', 'Stacey', 'Bronte', 'Immy']
 
 async def download_hist(channel):
     messages = []
@@ -74,10 +74,41 @@ async def on_message(message):
                     f.write(image)
 
                 mm.make(name)
+
+            elif '-combined' in message.content:
+                mm.make('redditimages/' + random.choice(os.listdir('redditimages/')))
+
+            elif '-reddit' in message.content:
+                if len(message.content.split()) < 4:
+                    await client.send_message(message.channel, 'Usage: $fight sub1 sub2 -reddit [-top]')
+                else:
+                    top = '-top' in message.content
+                    subs = ' '.join(filter(lambda x:x[0]!='-', message.content.split()[1:]))
+                    print(subs)
+                    im1, sub1 = reddit.get_random(subs.split()[0],top)
+                    im2, sub2 = reddit.get_random(subs.split()[1],top)
+                    if 'rand' in subs:
+                        await client.send_message(message.channel, sub1 + " : " + sub2)
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(im1) as resp:
+                            image1 = await resp.read()
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(im2) as resp:
+                            image2 = await resp.read()
+                    name1 = 'redditimages/' + str(len(os.listdir('redditimages/'))) + '.png'
+                    with open(name1, 'wb') as f:
+                        f.write(image1)
+                    name2 = 'redditimages/' + str(len(os.listdir('redditimages/'))) + '.png'
+                    with open(name2, 'wb') as f:
+                        f.write(image2)
+                    mm.makereddit(name1, name2)
+
             else:
                 await client.send_message(message.channel, 'No meme sent')
                 mm.make("")
             await client.send_file(message.channel, 'badmeme.png')
+
+
         elif command == 'quote':
             quoter = message.author
             quotee = message.content.split()[1]
@@ -109,9 +140,9 @@ async def on_message(message):
             await client.send_message(message.channel, text)
 
         elif command == "randimage":
-            await client.send_message(message.channel, 'https://r.sine.com/')
+            await client.send_message(message.channel, 'https://r.sine.com/?_=0')
 
-    elif message.content.lower().startswith("im") or message.content.lower().startswith("i'm"):
+    elif message.content.lower().startswith("im ") or message.content.lower().startswith("i'm "):
         await client.send_message(message.channel, "Hi " + message.content.partition(" ")[2] + ", I'm the FBI")
 
 
