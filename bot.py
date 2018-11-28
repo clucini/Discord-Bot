@@ -8,6 +8,7 @@ import makemame as mm
 import csv
 import pandas as pd
 import reddit
+import secret 
 
 client = discord.Client()
 
@@ -151,4 +152,4 @@ async def on_message(message):
 
 
 
-client.run('NDczMDY5NDY1MDUxODU2ODk2.Dt0MZg.igeJpA81VFBjslLlZtAASi2o9pU') 
+client.run(secret.bot_secret) 
