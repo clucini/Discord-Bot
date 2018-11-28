@@ -87,6 +87,10 @@ async def on_message(message):
                     print(subs)
                     im1, sub1 = reddit.get_random(subs.split()[0],top)
                     im2, sub2 = reddit.get_random(subs.split()[1],top)
+                    if im1 == "error":
+                        await client.send_message(message.channel, "Error on sub: " + sub1)
+                    if im2 == "error":
+                        await client.send_message(message.channel, "Error on sub: " + sub2)                        
                     if 'rand' in subs:
                         await client.send_message(message.channel, sub1 + " : " + sub2)
                     async with aiohttp.ClientSession() as session:
